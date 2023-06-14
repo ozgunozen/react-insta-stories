@@ -29,6 +29,7 @@ const Story = (props: StoryProps) => {
       <InnerContent
         action={props.action}
         isPaused={props.playState}
+        isMuted={props.mutedState}
         story={props.story}
         config={config}
         messageHandler={rendererMessageHandler}

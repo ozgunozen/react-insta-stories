@@ -31,7 +31,9 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
         onNext: props.onNext,
         onPrevious: props.onPrevious,
         keyboardNavigation: props.keyboardNavigation,
-        preventDefault: props.preventDefault
+        preventDefault: props.preventDefault,
+        mutedComponent: props.mutedComponent,
+        unmutedComponent: props.unmutedComponent
     }
     const [stories, setStories] = useState<{ stories: Story[] }>({ stories: generateStories(props.stories, renderers) });
     useEffect(() => {

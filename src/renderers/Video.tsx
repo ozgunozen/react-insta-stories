@@ -8,6 +8,7 @@ export const renderer: Renderer = ({
   story,
   action,
   isPaused,
+  isMuted,
   config,
   messageHandler,
 }) => {
@@ -29,8 +30,14 @@ export const renderer: Renderer = ({
       } else {
         vid.current.play().catch(() => {});
       }
+
+      if (isMuted) {
+        vid.current.muted = true;
+      } else {
+        vid.current.muted = false;
+      }
     }
-  }, [isPaused]);
+  }, [isPaused, isMuted]);
 
   const onWaiting = () => {
     action("pause", true);

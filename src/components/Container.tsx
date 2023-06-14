@@ -11,14 +11,6 @@ import {
 import useIsMounted from "./../util/use-is-mounted";
 
 export default function () {
-  const [currentId, setCurrentId] = useState<number>(0);
-  const [pause, setPause] = useState<boolean>(true);
-  const [bufferAction, setBufferAction] = useState<boolean>(true);
-  const [videoDuration, setVideoDuration] = useState<number>(0);
-  const isMounted = useIsMounted();
-
-  let mousedownId = useRef<any>();
-
   const {
     width,
     height,
@@ -30,9 +22,20 @@ export default function () {
     storyContainerStyles = {},
     onAllStoriesEnd,
     onPrevious,
-    onNext
+    onNext,
+    mutedComponent,
+    unmutedComponent,
   } = useContext<GlobalCtx>(GlobalContext);
   const { stories } = useContext<StoriesContextInterface>(StoriesContext);
+
+  const [currentId, setCurrentId] = useState<number>(0);
+  const [pause, setPause] = useState<boolean>(true);
+  const [mute, setMute] = useState<boolean>(stories[currentId].muted)
+  const [bufferAction, setBufferAction] = useState<boolean>(true);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+  const isMounted = useIsMounted();
+
+  let mousedownId = useRef<any>();
 
   useEffect(() => {
     if (typeof currentIndex === "number") {
@@ -46,6 +49,10 @@ export default function () {
       }
     }
   }, [currentIndex]);
+
+  useEffect(() => {
+    setMute(stories[currentId].muted)
+  }, [currentId, stories]);
 
   useEffect(() => {
     if (typeof isPaused === "boolean") {
@@ -74,6 +81,15 @@ export default function () {
       next();
     }
   };
+
+  const toggleMute = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    if (mute) {
+      setMute(false)
+    } else {
+      setMute(true)
+    }
+  }
 
   const toggleState = (action: string, bufferAction?: boolean) => {
     setPause(action === "pause");
@@ -168,6 +184,7 @@ export default function () {
         action={toggleState}
         bufferAction={bufferAction}
         playState={pause}
+        mutedState={mute}
         story={stories[currentId]}
         getVideoDuration={getVideoDuration}
       />
@@ -187,6 +204,9 @@ export default function () {
             onMouseDown={debouncePause}
             onMouseUp={mouseUp("next")}
           />
+          { stories[currentId].type === "video" && 
+            <div style={styles.volume} onClick={toggleMute}>{mute ? mutedComponent : unmutedComponent}</div>
+          }
         </div>
       )}
     </div>
@@ -207,4 +227,11 @@ const styles = {
     width: "inherit",
     display: "flex",
   },
+  volume: {
+    zIndex: 999,
+    display: "block",
+    position: "absolute" as const,
+    bottom: 50,
+    right: 50,
+  }
 };

@@ -16,6 +16,8 @@ export interface ReactInstaStoriesProps {
   defaultInterval?: number;
   isPaused?: boolean;
   currentIndex?: number;
+  mutedComponent?: JSX.Element;
+  unmutedComponent?: JSX.Element;
   renderers?: {
     renderer: Renderer;
     tester: Tester;
@@ -44,6 +46,8 @@ export interface GlobalCtx {
   defaultInterval?: number;
   isPaused?: boolean;
   currentIndex?: number;
+  mutedComponent?: JSX.Element;
+  unmutedComponent?: JSX.Element;
   renderers?: {
     renderer: Renderer;
     tester: Tester;
@@ -74,6 +78,7 @@ export type Action = (action: string, bufferAction?: boolean) => void;
 export type Renderer = React.FC<{
   action: Action;
   isPaused: boolean;
+  isMuted: boolean;
   story: Story;
   config: {
     width?: NumberOrString;
@@ -94,6 +99,7 @@ export interface StoryProps {
   story: Story;
   action: Action;
   playState: boolean;
+  mutedState: boolean;
   getVideoDuration: Function;
   bufferAction: boolean;
 }
@@ -116,6 +122,7 @@ export interface Story {
   styles?: object;
   content?: Renderer;
   originalContent?: Renderer;
+  muted?: boolean;
 }
 
 export interface Header {
