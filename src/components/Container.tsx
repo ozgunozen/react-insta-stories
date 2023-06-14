@@ -231,7 +231,7 @@ const styles = {
     zIndex: 999,
     display: "block",
     position: "absolute" as const,
-    bottom: 50,
-    right: 50,
+    bottom: 10,
+    right: 10,
   }
 };
