@@ -30,14 +30,16 @@ export const renderer: Renderer = ({
       } else {
         vid.current.play().catch(() => {});
       }
-
-      if (isMuted) {
-        vid.current.muted = true;
-      } else {
-        vid.current.muted = false;
-      }
     }
-  }, [isPaused, isMuted]);
+  }, [isPaused]);
+
+  React.useEffect(() => {
+    if (isMuted) {
+      vid.current.muted = true;
+    } else {
+      vid.current.muted = false;
+    }
+  }, [isMuted]);
 
   const onWaiting = () => {
     action("pause", true);
